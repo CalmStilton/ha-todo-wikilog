@@ -12,10 +12,10 @@ services:
       BOOKSTACK_TOKEN_ID: ${BOOKSTACK_TOKEN_ID}
       BOOKSTACK_TOKEN_SECRET: ${BOOKSTACK_TOKEN_SECRET}
       # Which to-do list goes into which table: todo.<list>=<page id>#<table id>
-      LOGS: ${LOGS:-todo.oracle_maintenance=55#bkmrk-maintenance-log-table,todo.oracle_issues=55#bkmrk-repairs-log-table}
+      LOGS: ${LOGS:-todo.oracle_maintenance=111#bkmrk-maintenance-log-table,todo.oracle_issues=111#bkmrk-repairs-log-table}
       # First run only (no state yet): treat items completed before this as
       # already on the wiki. 19:16 UTC on 5 Nov 2026 is when the Oracle tables
-      # were filled in by hand; anything ticked off after that gets added.
+      # were filled in by hand (they moved to page 111 at 20:07, contents unchanged); anything ticked off after that gets added.
       BASELINE_BEFORE: ${BASELINE_BEFORE:-2026-11-05T19:16:00Z}
       DISPLAY_TZ: Europe/London
       TZ: Europe/London

@@ -2,9 +2,9 @@
 
 Copies completed Home Assistant to-do items into tables on BookStack wiki
 pages, so there's a lasting "what was done when" record. Its first job is the
-maintenance log and the faults table on the
-[Sage Oracle page](https://wiki.lukmor.com/books/appliances-warranties/page/sage-oracle-dual-boiler-espresso-machine),
-fed from the **Oracle Maintenance** and **Oracle Issues** lists.
+two tables on the
+[Sage Oracle maintenance log](https://wiki.lukmor.com/books/appliances-warranties/page/sage-oracle-maintenance-log)
+page (BookStack page 111), fed from the **Oracle Maintenance** and **Oracle Issues** lists.
 
 Each run:
 
