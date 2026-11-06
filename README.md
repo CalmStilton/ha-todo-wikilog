@@ -80,15 +80,25 @@ copy it; it's only shown once.
 
 ### 2. Wiki service account
 
-Same pattern as the 4th Utility bill downloader. There's no API for creating
-users, so this is done by hand:
+There's no API for creating users, so this is done by hand. BookStack grants
+book permissions to roles, not to individual users, so the account gets its
+own role:
 
-1. **Settings → Users → Add new user**: name `ha-todo-wikilog`, a throwaway
-   email and password, role **Editor**.
-2. On the **Appliances & Warranties** book, open **Permissions** and give this
-   user view and update on that book only.
-3. Open the user from the Users list → **API Tokens → Create token**. Copy the
+1. **Settings → Roles → Create new role**: name it `Wiki automation`. Under
+   **System permissions** tick **Access system API**, and leave every
+   content permission (the "All books / chapters / pages" grid) unticked.
+2. **Settings → Users → Add new user**: name `ha-todo-wikilog`, a throwaway
+   email and password, role **Wiki automation** only.
+3. On the **Appliances & Warranties** book, open **Permissions**, add an
+   override for the **Wiki automation** role and tick **View** and
+   **Update**. The log page inherits this from the book.
+4. Open the user from the Users list → **API Tokens → Create token**. Copy the
    Token ID and Token Secret; the secret is only shown once.
+
+If runs fail with HTTP 403, BookStack's message in the notification says
+which part is missing. "does not have permission to make API calls" means
+step 1's API tick. "permission to access the requested page" or a 403 on
+update means step 3.
 
 ### 3. Portainer stack
 
