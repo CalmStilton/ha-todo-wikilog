@@ -300,6 +300,18 @@ class HomeAssistant:
         ).raise_for_status()
 
 
+def _check(resp, what):
+    """Raise with BookStack's own explanation, which says whether the problem
+    is API access as a whole or permission on this particular page."""
+    if resp.ok:
+        return
+    try:
+        detail = resp.json()["error"]["message"]
+    except (ValueError, KeyError, TypeError):
+        detail = resp.text[:200].strip() or resp.reason
+    raise WikilogError(f"BookStack refused to {what} (HTTP {resp.status_code}): {detail}")
+
+
 class BookStack:
     def __init__(self, url, token_id, token_secret):
         self.base = _base(url)
@@ -308,15 +320,16 @@ class BookStack:
     def get_html(self, page_id):
         resp = requests.get(f"{self.base}/api/pages/{page_id}",
                             headers=self.headers, timeout=TIMEOUT)
-        resp.raise_for_status()
+        _check(resp, f"read page {page_id}")
         content = resp.json().get("html") or ""
         if not content:
             raise WikilogError(f"Page {page_id} came back with no HTML")
         return content
 
     def put_html(self, page_id, content):
-        requests.put(f"{self.base}/api/pages/{page_id}", headers=self.headers,
-                     json={"html": content}, timeout=TIMEOUT).raise_for_status()
+        resp = requests.put(f"{self.base}/api/pages/{page_id}", headers=self.headers,
+                            json={"html": content}, timeout=TIMEOUT)
+        _check(resp, f"update page {page_id}")
 
 
 # --- The run ------------------------------------------------------------------

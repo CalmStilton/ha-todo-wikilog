@@ -291,3 +291,20 @@ def test_baseline_before_env_bootstraps_first_run(monkeypatch, tmp_path):
     assert w.main(["run"]) == 0
     assert wiki.pages[55].count("Descale") == 1 and wiki.puts == 1
     assert w.main(["run"]) == 0 and wiki.puts == 1  # second run: nothing new
+
+
+class FakeResp:
+    def __init__(self, status, body):
+        self.status_code, self._body = status, body
+        self.ok = status < 400
+        self.reason, self.text = "Forbidden", json.dumps(body)
+
+    def json(self):
+        return self._body
+
+
+def test_bookstack_error_says_why(monkeypatch):
+    body = {"error": {"code": 403, "message": "You do not have permission to access the requested page."}}
+    monkeypatch.setattr(w.requests, "put", lambda *a, **k: FakeResp(403, body))
+    with pytest.raises(w.WikilogError, match=r"update page 111 \(HTTP 403\): You do not have permission"):
+        w.BookStack("http://wiki", "i", "s").put_html(111, "<p>x</p>")
