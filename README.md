@@ -98,7 +98,10 @@ own role:
 If runs fail with HTTP 403, BookStack's message in the notification says
 which part is missing. "does not have permission to make API calls" means
 step 1's API tick. "permission to access the requested page" or a 403 on
-update means step 3.
+update means step 3, or that the page itself has its own permissions that
+override the book's. That happened on first deploy: page 111 was created by
+another account and didn't pick up the book-level grant until the page's own
+permissions (or its owner) were changed to include this account.
 
 ### 3. Portainer stack
 
